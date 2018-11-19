@@ -1,7 +1,9 @@
 package coloreo;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,6 +17,7 @@ public class Colorear {
 	private GrafoNDNP grafo;
 	private int gradMax;
 	private int gradMin;
+	double porcentaje;
 	/// LISTAS PARA GRABAR ARCHIVO
 	private int colorMejorCasoSA;
 	private NodoColor [] ordenMejorCasoSA;
@@ -30,7 +33,7 @@ public class Colorear {
 			int nodos = sc.nextInt();
 			grafo = new GrafoNDNP(nodos);
 			int cantAristas = sc.nextInt();
-			double porcentaje = sc.nextDouble();
+			porcentaje = sc.nextDouble();
 			gradMax = sc.nextInt();
 			gradMin = sc.nextInt();
 			sc.nextLine();
@@ -41,6 +44,7 @@ public class Colorear {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		sc.close();
 		colorMejorCasoSA = 0;
 		ordenMejorCasoSA = new NodoColor[grafo.getCantNodos()];
 		
@@ -86,7 +90,7 @@ public class Colorear {
 				color++;
 			}
 		}
-		colorMejorCaso = color-1;
+		colorMejorCaso = color-1;// por si es uno, para que entre por cero
 		
 		//Obtener mejor caso (para segunda parte)
 		if(algoritmo == 0 ) {
@@ -123,5 +127,36 @@ public class Colorear {
 		}
 		return res;
 	}
+	
+	public void escribirArchivo() {
+		grabar("secuencialAleatorio.out", colorMejorCasoSA, ordenMejorCasoSA);
+		grabar("Matula.out", colorMejorCasoMa, ordenMejorCasoMa);
+		grabar("Welsh-Powell.out", colorMejorCasoWP, ordenMejorCasoWP);
+	}
+	
+	public void grabar(String path, int colorMejor, NodoColor[] ordenMejor){
+	     FileWriter fichero = null;
+	     PrintWriter pw = null;
+			try {
+			fichero = new FileWriter(path);
+			pw = new PrintWriter(fichero);
+			int cantNod = grafo.getCantNodos();
+			int cantAristas = grafo.cantidadAristas();
+			double porcentaje = (double) grafo.cantidadAristas() * 100 / grafo.getMaxAristas();
+			pw.println(cantNod + " " + colorMejor + " " + cantAristas + " " + porcentaje + " " + gradMax + " " + gradMin);
+			for(NodoColor nodo: ordenMejor)
+				pw.println("nodo " + (nodo.getNodo() + 1) + " color " + nodo.getColor());
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+				try {
+					if (fichero != null)
+					fichero.close();
+				} catch (IOException e2) {
+					e2.printStackTrace();
+				}
+		}
+	}
+
 	
 }
