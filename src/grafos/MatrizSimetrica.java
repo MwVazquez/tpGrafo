@@ -3,13 +3,13 @@ package grafos;
 public class MatrizSimetrica {
 
 	protected int vector[];
-	protected int nodos;
-	protected int tamanio;
+	protected int cantNodos;
+	protected int tamanioVector;
 	
-	public MatrizSimetrica(int nodos) {
-		this.nodos = nodos;
-		this.tamanio = ( (int)Math.pow(nodos, 2) - nodos ) / 2;;
-		this.vector= new int[tamanio];
+	public MatrizSimetrica(int cantNodos) {
+		this.cantNodos = cantNodos;
+		this.tamanioVector = ( (int)Math.pow(cantNodos, 2) - cantNodos ) / 2;;
+		this.vector= new int[tamanioVector];
 	}
 	
 	public void setMatrizS(int f, int c) {
@@ -38,12 +38,12 @@ public class MatrizSimetrica {
 			c=aux;
 		}
 		
-		return f*this.nodos + c - ( (int)Math.pow(f, 2)+ 3*f +2 )/2;
+		return f*this.cantNodos + c - ( (int)Math.pow(f, 2)+ 3*f +2 )/2;
 	}
 	
 	
 	public int getTamanio() {
-		return this.tamanio;
+		return this.tamanioVector;
 	}
 	
 	public int getValorIndiceVector(int i) {
@@ -51,12 +51,12 @@ public class MatrizSimetrica {
 	}
 	
 	public int getNodos() {
-		return this.nodos;
+		return this.cantNodos;
 	}
 	
 	public int getGrado(int nodo) {
 		int grado = 0;
-		for(int i = 0; i < tamanio; i++)
+		for(int i = 0; i < tamanioVector; i++)
 			if(vector[getIndice(nodo, i)] == 1)
 				grado++;
 		return grado;
