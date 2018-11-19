@@ -2,6 +2,9 @@ package base;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -67,4 +70,15 @@ public static GrafoNDNP leer(String path) throws FileNotFoundException{
 		 sc.close();
 		return new GrafoNDNP(cantidadNodos, cantidadAristas, porcentajeAdy, gradoMax, gradoMin);
 	}
+   public void escribir(String nomArchivo) throws IOException{
+	PrintWriter salida = new PrintWriter(new FileWriter(nomArchivo));
+	
+	salida.println(this.nodos+" "+this.cantArista+" "+this.porcentajeAdyacencia+" "+this.gradoMax+" "+this.gradoMin);
+	
+	for(int i=0;i<=nodos-2;i++) 
+		for (int j = i+1; j <= nodos-1; j++)
+			if(this.matriz.getValor(i, j)==1)
+		     salida.println(i+" "+j);
+	salida.close();
+}
 }
