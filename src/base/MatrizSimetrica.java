@@ -53,4 +53,12 @@ public class MatrizSimetrica {
 	public int getNodos() {
 		return this.nodos;
 	}
+	
+	public int getGrado(int nodo) {
+		int grado = 0;
+		for(int i = 0; i < tamanio; i++)
+			if(vector[getIndice(nodo, i)] == 1)
+				grado++;
+		return grado;
+	}
 }
