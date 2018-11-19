@@ -1,5 +1,7 @@
 package coloreo;
 
+import java.util.Comparator;
+
 public class NodoColor implements Comparable <NodoColor>{
 
 	private int grado;
@@ -37,8 +39,13 @@ public class NodoColor implements Comparable <NodoColor>{
 	}
 
 	@Override
-	public int compareTo(NodoColor arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int compareTo(NodoColor o) {
+		return this.grado > o.grado? 1: this.grado == o.grado? 0 : -1;
 	}
+	
+	public static Comparator<NodoColor> ComparadorMatula = new Comparator<NodoColor>() {
+		public int compare(NodoColor g1, NodoColor g2) {
+			return g1.grado > g2.grado? -1: g1.grado == g2.grado? 0 : 1;
+		}
+	};
 }

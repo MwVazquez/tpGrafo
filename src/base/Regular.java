@@ -48,10 +48,8 @@ public class Regular extends Generador {
 				for (int i = 0; i < this.nodos; i++) {
 					this.matriz.setMatrizS(i, (i+salto)%nodos);
 					grados[i]++;
-					grados[(i+salto)%nodos]++;
-					
+					grados[(i+salto)%nodos]++;	
 				}
-				
 				salto++;
 				grado-=2; 
 			}

@@ -1,10 +1,10 @@
-package base;
+package grafos;
 
 public class MatrizSimetrica {
 
-	private int vector[];
-	private int nodos;
-	private int tamanio;
+	protected int vector[];
+	protected int nodos;
+	protected int tamanio;
 	
 	public MatrizSimetrica(int nodos) {
 		this.nodos = nodos;

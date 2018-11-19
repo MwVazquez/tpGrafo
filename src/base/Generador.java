@@ -1,5 +1,7 @@
 package base;
 
+import grafos.MatrizSimetrica;
+
 public abstract class  Generador  {
 	
 	MatrizSimetrica matriz;
