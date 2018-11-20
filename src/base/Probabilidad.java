@@ -1,5 +1,7 @@
 package base;
 
+import java.io.IOException;
+
 public class Probabilidad extends Generador {
 
 	public Probabilidad(int nodos, int porcentaje) {
@@ -8,8 +10,8 @@ public class Probabilidad extends Generador {
 	}
 
 	@Override
-	public void generar() {
-		Double porc = (double) this.porcentaje / 100;
+	public void generar() throws IOException {
+		Double porc = (double) this.porcentajeAdyacencia / 100;
 		Double random;
 		int cantArista = 0;
 		int menor=0,mayor=0;
@@ -19,7 +21,8 @@ public class Probabilidad extends Generador {
 	
 			for (int j = i + 1; j < this.nodos; j++) {
 				if ((random = Math.random()) < porc || porc.equals(random)) {
-					this.matriz.setMatrizS(i, j);
+					this.matriz.ponderarArista(i, j);
+					aristas.add(new Arista(i,j));
 					grados[i]++;
 					grados[j]++;
 					cantArista++;
@@ -34,10 +37,14 @@ public class Probabilidad extends Generador {
 				mayor=grados[i];
 		}
 		///privados
-		this.cantArista = cantArista;
+		
 		this.gradoMin = menor;
 		this.gradoMax = mayor;
-		this.porcentajeAdyacencia = cantArista/(this.nodos*(this.nodos-1)/2);
+		this.cantArista=aristas.size();
+		porcentajeAdyacencia= (int)((float)cantArista/(nodos*(nodos-1)/2)*100);
+		
+		Archivo archi=new Archivo(nodos,cantArista,porcentajeAdyacencia,gradoMin,gradoMax, aristas);
+		archi.escribir();
 	}
 
 

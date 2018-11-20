@@ -1,5 +1,6 @@
 package base;
 
+import java.io.IOException;
 import java.util.Vector;
 
 public class NPartitos extends Generador {
@@ -11,7 +12,7 @@ public class NPartitos extends Generador {
 	}
 
 	@Override
-	public void generar() {
+	public void generar() throws IOException {
 		double cantAristas = 0;
 		int grados[]=new int[nodos];
 		int gradoMin=nodos,gradoMax=0;
@@ -31,7 +32,8 @@ public class NPartitos extends Generador {
 		for (int i = 0; i < nodos-1; i++) {
 			for (int j = i+1; j < nodos ; j++) {
 				if(grupos.get(i) != grupos.get(j)) {
-					this.matriz.setMatrizS(i, j);
+					this.matriz.ponderarArista(i, j);
+					aristas.add(new Arista(i,j));
 					grados[i]++;
 					grados[j]++;
 					cantAristas++;
@@ -48,14 +50,18 @@ public class NPartitos extends Generador {
 		
 		this.gradoMin = gradoMin;
 		this.gradoMax = gradoMax;
-		this.porcentajeAdyacencia= (int)(cantAristas /(this.nodos*(this.nodos-1)/2)*100);
+		this.cantArista=aristas.size();
+		porcentajeAdyacencia= (int)((float)cantAristas/(nodos*(nodos-1)/2)*100);
 		this.cantArista=(int)cantAristas;			
 		
-		System.out.println("gradoMin: " + gradoMin + "\n" +
-							"gradoMax: " + gradoMax + "\n" +
-							"Adyacencia: "+ porcentajeAdyacencia + "\n" + 
-							"cantAristas: " + cantAristas + "\n" +
-							"nodos: " + nodos);
-		System.out.println();
+//		System.out.println("gradoMin: " + gradoMin + "\n" +
+//							"gradoMax: " + gradoMax + "\n" +
+//							"Adyacencia: "+ porcentajeAdyacencia + "\n" + 
+//							"cantAristas: " + cantAristas + "\n" +
+//							"nodos: " + nodos);
+//		System.out.println();
+//		 
+		Archivo archi=new Archivo(nodos,cantArista,porcentajeAdyacencia,gradoMin,gradoMax, aristas);
+		archi.escribir();
 	}
 }

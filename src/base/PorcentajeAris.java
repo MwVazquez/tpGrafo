@@ -1,4 +1,8 @@
 package base;
+import java.io.IOException;
+
+//<<<<<<< HEAD
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,17 +21,19 @@ public class PorcentajeAris extends Generador{
 	// preguntar si esta bien lo del pivote
 	/**
 	 * hola
+	 * @throws IOException 
 	 */
 	@Override
-	public void generar() {
+	public void generar() throws IOException {
 		
-		int cantidadAristas = (int)(((nodos*(nodos-1))/2)*(porcentaje/(float)100));
-		System.out.println("Can "+cantidadAristas);
+		int cantidadAristas = (int)(((nodos*(nodos-1))/2)*(porcentajeAdyacencia/(float)100));
+		//System.out.println("Can "+cantidadAristas);
 		int grados[]=new int[nodos];
 		int gradoMin=nodos,gradoMax=0;
 		ArrayList<Arista>lista=new ArrayList<Arista>();
 		for(int i=1;i<nodos;i++) {
-			this.matriz.setMatrizS(0, i);
+			this.matriz.ponderarArista(0, i);
+			aristas.add(new Arista(0,i));
 			grados[0]++;
 			grados[i]++;
 			//System.out.println(0+"   "+i);
@@ -42,7 +48,8 @@ public class PorcentajeAris extends Generador{
 		
 		for (int i = 0; i < cantidadAristas-nodos+1; i++) {
 			aux=lista.get(i);
-			this.matriz.setMatrizS(aux.nodoOrigen, aux.nodoDestino);
+			this.matriz.ponderarArista(aux.nodoOrigen, aux.nodoDestino);
+			aristas.add(new Arista(aux.nodoOrigen, aux.nodoDestino));
 			grados[aux.nodoOrigen]++;
 			grados[aux.nodoDestino]++;
 			//System.out.println(aux.nodoDestino+"   "+aux.nodoOrigen);
@@ -56,8 +63,15 @@ public class PorcentajeAris extends Generador{
 		
 		this.gradoMin = gradoMin;
 		this.gradoMax = gradoMax;
-		this.porcentajeAdyacencia=porcentaje;
-		this.cantArista=cantidadAristas;
+		
+		
+		this.cantArista=aristas.size();
+		porcentajeAdyacencia= (int)((float)cantArista/(nodos*(nodos-1)/2)*100);
+		
+		//System.out.println(gradoMax+"    " +"     "+porcentajeAdyacencia+" ");
+		Archivo archi=new Archivo(nodos,cantArista,porcentajeAdyacencia,gradoMin,gradoMax, aristas);
+		archi.escribir();
 	}
+	
 	
 }

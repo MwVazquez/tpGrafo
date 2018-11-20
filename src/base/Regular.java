@@ -1,6 +1,6 @@
 package base;
 
-import java.util.Random;
+import java.io.IOException;
 
 // cantidad de nodos impar, no tiene grado impar
 // pares sin restricciones
@@ -13,27 +13,32 @@ public class Regular extends Generador {
 		this.gradoMin = grado;
 	}
 
-	private int randomBetween(int a, int b) {
-		Random rnd = new Random();
-		System.out.println("a: " + a + " " + "b: " + (b));
-		return rnd.nextInt(b - a + 1) + a;
-	}
+//	private int randomBetween(int a, int b) {
+//		Random rnd = new Random();
+//		System.out.println("a: " + a + " " + "b: " + (b));
+//		return rnd.nextInt(b - a + 1) + a;
+//	}
 
 	@Override
 	// lanzar una excepcion
 	// en gradoMax viene el grado regular
-	public void generar() {
-		if (gradoMax % 2 != 0 && nodos % 2 != 0)
+	public void generar() throws IOException {
+		if (gradoMax % 2 != 0 && nodos % 2 != 0) {
 			System.out.println("cantidad de nodos impar, no tiene grado impar");
-		if (nodos <= gradoMax)
+			return;
+		}
+		if (nodos <= gradoMax) {
 			System.out.println("cantidad de nodos mayor a grado");
+			return;
+		}
 		
 		int grados[] = new int[nodos], grado = gradoMax;
 		int mitad = nodos / 2;
 		
 		if (grado % 2 == 1) {
 			for (int y = 0; y < mitad; y++) {
-				this.matriz.setMatrizS(y, mitad + y);
+				this.matriz.ponderarArista(y, mitad + y);
+				aristas.add(new Arista(y, mitad + y));
 				grados[y]++;
 				grados[mitad + y]++;
 			}
@@ -46,7 +51,8 @@ public class Regular extends Generador {
 			while (grado <= this.gradoMax && grado!=0) {
 
 				for (int i = 0; i < this.nodos; i++) {
-					this.matriz.setMatrizS(i, (i+salto)%nodos);
+					this.matriz.ponderarArista(i, (i+salto)%nodos);
+					aristas.add(new Arista(i, (i+salto)%nodos));
 					grados[i]++;
 					grados[(i+salto)%nodos]++;	
 				}
@@ -54,84 +60,14 @@ public class Regular extends Generador {
 				grado-=2; 
 			}
 		}
-
-//		if (grado >= 2) {
-//			this.matriz.setMatrizS(0, nodos - 1);
-//			grados[0]++;
-//			grados[nodos - 1]++;
-//			for (int y = 0; y < nodos - 1; y++) {
-//				this.matriz.setMatrizS(y, y + 1);
-//					grados[y]++;
-//					grados[y + 1]++;
-//			}
-//			grado -= 2;
-//		}
 		
-
-/*		while (grado > 0) {
-			// cruz
-			if (grado % 2 == 1) {
-				for (int y = 0; y < mitad; y++) {
-					this.matriz.setMatrizS(y, mitad + y);
-					grados[y]++;
-					grados[mitad + y]++;
-				}
-				grado -= 1;
-			}
-
-			// circulo
-			if (grado >= 2) {
-				this.matriz.setMatrizS(0, nodos - 1);
-				grados[0]++;
-				grados[nodos - 1]++;
-				for (int y = 0; y < nodos - 1; y++) {
-					this.matriz.setMatrizS(y, y + 1);
-					grados[y]++;
-					grados[y + 1]++;
-				}
-				grado -= 2;
-			}
-			int y = 0;
-			int nodoInicialFijo = 0, nodoFinalFijo = 2, cuadrados = 0;// nodo x el cual inicio el recorrido
-			int nodoInicial = nodoInicialFijo, nodoFinal = nodoFinalFijo;
-			int cantidadIteraciones = nodos / 2;
-			while (grado >= 2) {
-				// cuadrados y demas
-				int salto = nodoFinalFijo - nodoInicialFijo;
-				int ciclos = nodos / salto;
-				if (ciclos * salto != nodos) {
-					if (ciclos % 2 == 0)
-						ciclos = 2;
-					else {
-						ciclos = 1;
-						cantidadIteraciones = nodos * 2;
-					}
-				}
-				for (int x = 0; x < cantidadIteraciones; x++) {
-					this.matriz.setMatrizS(nodoInicial, nodoFinal);
-					grados[nodoInicial]++;
-					grados[nodoFinal]++;
-					nodoInicial = nodoFinal;
-					nodoFinal += salto;
-					nodoFinal = nodoFinal % nodos;
-				}
-				nodoFinalFijo++;
-				nodoInicialFijo++;
-				y++;
-				/// SAlto ver....
-				if (y == salto) {
-					grado -= 2;
-					y = 0;
-					nodoInicialFijo = 0;
-				}
-				nodoInicial = nodoInicialFijo;
-				nodoFinal = nodoFinalFijo;
-
-			}
-			System.out.println(nodoFinalFijo);
-		}*/
-
-		System.out.println("");
+		//System.out.println("grados"+ gradoMax);
+		float aux=(gradoMax/(float)(nodos-1));
+		porcentajeAdyacencia= (int)(aux*100);
+		this.cantArista=aristas.size();
+		porcentajeAdyacencia= (int)((float)cantArista/(nodos*(nodos-1)/2)*100);
+		Archivo archi=new Archivo(nodos,cantArista,porcentajeAdyacencia,gradoMin,gradoMax, aristas);
+		archi.escribir();
 
 	}
 

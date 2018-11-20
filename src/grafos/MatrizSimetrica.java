@@ -12,9 +12,9 @@ public class MatrizSimetrica {
 		this.vector= new int[tamanio];
 	}
 	
-	public void setMatrizS(int f, int c) {
+	/*public void setMatrizS(int f, int c) {
 		this.vector[getIndice(f, c)] = 1;
-	}
+	}*/
 	
 	public void setMatrizS(int f, int c, int costo) {
 		this.vector[getIndice(f, c)] = costo;
@@ -60,5 +60,9 @@ public class MatrizSimetrica {
 			if(vector[getIndice(nodo, i)] == 1)
 				grado++;
 		return grado;
+	}
+
+	public void ponderarArista(int f, int c) {
+		this.vector[getIndice(f, c)] = 1;
 	}
 }
